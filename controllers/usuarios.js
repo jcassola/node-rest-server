@@ -46,7 +46,7 @@ const usuariosPut = async (req, res = response) => {
     const salt = bcryptjs.genSaltSync();
     resto.password = bcryptjs.hashSync(password, salt);
   }
-  const usuario = await Usuario.findByIdAndUpdate(id, resto);
+  const usuario = await Usuario.findByIdAndUpdate(id, resto, { new: true });
   res.json({
     usuario,
   });
@@ -58,6 +58,7 @@ const usuariosDelete = async (req, res = response) => {
 
   //Cambiar estado
   const usuario = await Usuario.findByIdAndUpdate(id, { status: false });
+
   res.json({
     usuario,
   });
