@@ -1,12 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acceso denegado</title>
-</head>
-<body>
-    <h1>Acceso denegado</h1>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+
+    <title>Google SignIn</title>
+  </head>
+  <body>
+    <h1>Google SignIn</h1>
+    <hr />
+    <div
+      id="g_id_onload"
+      data-client_id="35859149637-g8ss5dauospmk8uaihr4877hah380fan.apps.googleusercontent.com"
+      data-callback="handleCredentialResponse"
+    ></div>
+    <div class="g_id_signin" data-type="standard"></div>
+
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+    <script>
+      var url = window.location.hostname.includes("localhost")
+        ? "http://localhost:8080/api/auth/google"
+        : "production url";
+
+      function handleCredentialResponse(response) {
+        // console.log("Encoded JWT ID token: " + response.credential);
+        const id_token = response.credential;
+        const data = { id_token };
+
+        fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        })
+          .then((resp) => resp.json())
+          .then((data) => console.log("Our server", data))
+          .catch(console.log);
+      }
+    </script>
+  </body>
 </html>
